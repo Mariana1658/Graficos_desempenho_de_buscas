@@ -72,14 +72,14 @@ def LS_performance(a_array_length): #Linear Search
     
 
 
-# In[1]:
+# In[19]:
 
 
-def g_BS_performance(base, amount, n_array): #Binary Search
+def g_BS_performance(base, amount, n_array, label): #Binary Search
     #Exibe um gráfico com o desempenho da BS em listas de diferentes tamanhos 
     #A escala de cores tem como base o maior e menor valor dentre os gráficos
     
-    title = 'binary_search_performance_X' + str(n_array) + '_' + str(base) + '_' + str(base+amount*(n_array-1)) + '.png'
+    title = 'binary_search_performance_X' + str(n_array) + '_' + str(base) + '_' + str(base+amount*(n_array-1)) + str(label) + '.png'
     
     #cria um novo mapa de cores
     colors1 = cm.get_cmap('Blues', 128)
@@ -90,8 +90,16 @@ def g_BS_performance(base, amount, n_array): #Binary Search
     percentage = (100/n_array)/100
     percent_x = 1 - percentage
     
+    max_size = base+(amount*(n_array-1))
+    scale = 5
+    
     if(n_array>1): #cria varios gráficos
-        fig, axes = plt.subplots(1,n_array, constrained_layout=False)
+        
+        if(max_size/10 > 1):
+            fig, axes = plt.subplots(1,n_array, constrained_layout=False, figsize=(n_array,max_size/scale))
+        else:
+            fig, axes = plt.subplots(1,n_array, constrained_layout=False, figsize=(n_array,3))
+            
         for current_ax in axes:
             
             newcmp = ListedColormap(cmp(np.linspace(1, percent_x, 256))) #adiciona as cores
@@ -99,29 +107,44 @@ def g_BS_performance(base, amount, n_array): #Binary Search
             array = BS_performance(base)
             current_ax.pcolormesh(np.row_stack(array),cmap=newcmp)
             
-            #set_axis_off
-            current_ax.set_xticks(np.arange(0, 0, 1.0))
-            current_ax.set_yticks(np.arange(0, 0, 1.0))
-            current_ax.set_title(base)
+            if(label):
+                #legenda
+                current_ax.set_yticklabels(array)
+                current_ax.set_yticks(np.arange(1, base+1, 1.0))
+                current_ax.set_xticks(np.arange(0, 0, 1.0))
+                
+            else:
+                #set_axis_off()
+                current_ax.set_xticks(np.arange(0, 0, 1.0))
+                current_ax.set_yticks(np.arange(0, 0, 1.0))
             
+            current_ax.set_title(base)
             base = base + amount
     
-    else: #cria apenas um gráfico      
-        fig, axes = plt.subplots(1, 3)
+    else: #cria apenas um gráfico
+        
+        if(max_size/10 > 1):
+            fig, axes = plt.subplots(figsize=(n_array,max_size/scale))
+        else:
+            fig, axes = plt.subplots(figsize=(n_array,3))
+            
         newcmp = ListedColormap(cmp(np.linspace(1, percent_x, 256)))  
         array = BS_performance(base)
-        axes[1].pcolormesh(np.row_stack((array)),cmap=newcmp)
+        axes.pcolormesh(np.row_stack((array)),cmap=newcmp)
         
-        #legenda
-        if(base<=20):
-            axes[1].set_yticklabels(array)
-            axes[1].set_yticks(np.arange(1, base+1, 1.0))
-            axes[1].set_xticks(np.arange(0, 0, 1.0))
+        if(label):
+            #legenda
+                axes.set_yticklabels(array)
+                axes.set_yticks(np.arange(1, base+1, 1.0))
+                axes.set_xticks(np.arange(0, 0, 1.0))
         else:
-            #set_axis_off
-            axes[1].set_xticks(np.arange(0, 0, 1.0))
-            axes[1].set_yticks(np.arange(0, 0, 1.0))
-            
+            #set_axis_off()
+                axes.set_xticks(np.arange(0, 0, 1.0))
+                axes.set_yticks(np.arange(0, 0, 1.0))
+        
+        
+        
+
         #colorbar
         '''
         im=axes.pcolormesh(np.row_stack((BS_performance(base))),cmap=newcmp)
@@ -129,23 +152,21 @@ def g_BS_performance(base, amount, n_array): #Binary Search
         cax = divider.append_axes("right", size="10%", pad=0.05)
         plt.colorbar(im, cax=cax)'''
         
-        axes[0].set_axis_off()
-        axes[1].set_title(base)
-        axes[2].set_axis_off()
-
-        
+        axes.set_title(base)
+    
+    plt.tight_layout()
     plt.savefig((title), format='png')
     #plt.show() 
 
 
-# In[8]:
+# In[20]:
 
 
-def g_LS_performance(base, amount, n_array):  #Linear Search
+def g_LS_performance(base, amount, n_array, label):  #Linear Search
     #Exibe um gráfico com o desempenho da LS em listas de diferentes tamanhos 
     #A escala de cores tem como base o maior e menor valor dentre os gráficos
     
-    title = 'linear_search_performance_X' + str(n_array) + '_' + str(base) + '_' + str(base+amount*(n_array-1)) + '.png'
+    title = 'linear_search_performance_X' + str(n_array) + '_' + str(base) + '_' + str(base+amount*(n_array-1)) + str(label) + '.png'
     
     #cria um novo mapa de cores
     colors1 = cm.get_cmap('ocean', 128)
@@ -158,50 +179,71 @@ def g_LS_performance(base, amount, n_array):  #Linear Search
     percentage = (100/n_array)/100
     percent_x = 1 - percentage
     
+    max_size = base+(amount*(n_array-1))
+    scale = 5
+    
     if(n_array>1): #cria varios gráficos
-        fig, axes = plt.subplots(1,n_array)
+        
+        if(max_size/10 > 1):
+            fig, axes = plt.subplots(1,n_array, constrained_layout=False, figsize=(n_array,max_size/scale))
+        else:
+            fig, axes = plt.subplots(1,n_array, constrained_layout=False, figsize=(n_array,3))
+
         for current_ax in axes:
             
             newcmp = ListedColormap(cmp(np.linspace(1-percent_x, 0, 256))) #adiciona as cores
             percent_x = percent_x - percentage
             array = LS_performance(base)
             current_ax.pcolormesh(np.row_stack((array)),cmap=newcmp)
+               
             
-            #set_axis_off
-            current_ax.set_xticks(np.arange(0, 0, 1.0))
-            current_ax.set_yticks(np.arange(0, 0, 1.0))
+            if(label):
+                #legenda
+                current_ax.set_yticklabels(array[::-1])
+                current_ax.set_yticks(np.arange(min(array), max(array)+1, 1.0))
+                current_ax.set_xticks(np.arange(0, 0, 1.0))
+            else:
+                #set_axis_off()
+                current_ax.set_xticks(np.arange(0, 0, 1.0))
+                current_ax.set_yticks(np.arange(0, 0, 1.0))
+            
             current_ax.set_title(base)
-            
             base = base + amount
             
     else:  #cria apenas um gráfico
-        fig, axes = plt.subplots(1,3)
+        
+        if(max_size/10 > 1):
+            fig, axes = plt.subplots(figsize=(n_array,max_size/scale))
+        else:
+            fig, axes = plt.subplots(figsize=(n_array,3))
+            
         newcmp = ListedColormap(cmp(np.linspace(1,0, 256))) #adiciona as cores   
         array = LS_performance(base)
-        axes[1].pcolormesh(np.row_stack(array),cmap=newcmp)
+        axes.pcolormesh(np.row_stack(array),cmap=newcmp)
         
-        #legenda
-        if(len(array)<=20):
-            axes[1].set_yticklabels(array[::-1])
-            axes[1].set_yticks(np.arange(min(array), max(array)+1, 1.0))
-            axes[1].set_xticks(np.arange(0, 0, 1.0))
+        if(label):
+            #legenda
+            axes.set_yticklabels(array[::-1])
+            axes.set_yticks(np.arange(min(array), max(array)+1, 1.0))
+            axes.set_xticks(np.arange(0, 0, 1.0))
         else:
-            #set_axis_off
-            axes[1].set_xticks(np.arange(0, 0, 1.0))
-            axes[1].set_yticks(np.arange(0, 0, 1.0))
+            #set_axis_off()
+            axes.set_xticks(np.arange(0, 0, 1.0))
+            axes.set_yticks(np.arange(0, 0, 1.0))
         
-        axes[0].set_axis_off()
-        axes[1].set_title(base)
-        axes[2].set_axis_off()
         
+
+        axes.set_title(base)
+
+    plt.tight_layout()   
     plt.savefig((title), format='png')
     #plt.show()
 
 
-# In[31]:
+# In[21]:
 
 
-def performance_comparison(a_array_length, a_search_type): #Performance Comparison
+def performance_comparison(a_array_length, a_search_type, label): #Performance Comparison
     #Faz uma comparação entre os diferentes tipos de busca
     #A escala de cores tem como base o tamanho do array
     
@@ -215,24 +257,49 @@ def performance_comparison(a_array_length, a_search_type): #Performance Comparis
 
     colors = np.vstack((colors2(np.linspace(0, 1, 128)),colors1(np.linspace(0.1, 1, 128))))
     cmp = ListedColormap(colors)
+    
+    max_size = max(a_array_length)
+    scale = 5
+    
+    if(max_size/10 > 1):
+        fig, axes = plt.subplots(1,len(a_search_type), constrained_layout=False, figsize=(len(a_array_length),max_size/scale))
+    else:
+        fig, axes = plt.subplots(1,len(a_search_type), constrained_layout=False, figsize=(len(a_array_length),3))
 
-    fig, axes = plt.subplots(1,len(a_search_type))
     
     i=0 #controla o 'a_array_length' e o 'a_search_type'
     for current_ax in axes:
-        #set_axis_off
-        current_ax.set_xticks(np.arange(0, 0, 1.0))
-        current_ax.set_yticks(np.arange(0, 0, 1.0))
         
         if(a_search_type[i]=='BS'): #Binary Search
             array = BS_performance(a_array_length[i])         
             percent_x = (100*BS_max(a_array_length[i])/a_array_length[i])*0.01 #ajusta a escala de cores
             newcmp = ListedColormap(cmp(np.linspace(1, 1-percent_x, 256)))
             
+            if(label):
+                #legenda
+                current_ax.set_yticklabels(array)
+                current_ax.set_yticks(np.arange(1, len(array)+1, 1.0))
+                current_ax.set_xticks(np.arange(0, 0, 1.0))
+                
+            else:
+                #set_axis_off()
+                current_ax.set_xticks(np.arange(0, 0, 1.0))
+                current_ax.set_yticks(np.arange(0, 0, 1.0))
+            
         elif(a_search_type[i]=='LS'): #Linear Search
             array = LS_performance(a_array_length[i])
             percent_x = (100/a_array_length[i])/100 #ajusta a escala de cores
             newcmp = ListedColormap(cmp(np.linspace(percent_x, 1, 256)))
+            
+            if(label):
+                #legenda
+                current_ax.set_yticklabels(array[::-1])
+                current_ax.set_yticks(np.arange(min(array), max(array)+1, 1.0))
+                current_ax.set_xticks(np.arange(0, 0, 1.0))
+            else:
+                #set_axis_off()
+                current_ax.set_xticks(np.arange(0, 0, 1.0))
+                current_ax.set_yticks(np.arange(0, 0, 1.0))
        
         current_ax.pcolormesh(np.row_stack(array),cmap=newcmp)
         current_ax.set_title(a_search_type[i] + " " + str(a_array_length[i]))    
@@ -243,13 +310,17 @@ def performance_comparison(a_array_length, a_search_type): #Performance Comparis
         title += a_search_type[i]
         title += str(a_array_length[i])
         title += '_'
-        
+    
+    plt.tight_layout()
+    
+    
+    title += str(label)
     title += '.png'
     plt.savefig((title), format='png')
     #plt.show()   
 
 
-# In[39]:
+# In[9]:
 
 
 def g_sum_performance(base, amount, g_length ,search_type): #SUM
@@ -286,7 +357,7 @@ def g_sum_performance(base, amount, g_length ,search_type): #SUM
     #plt.show()
 
 
-# In[33]:
+# In[10]:
 
 
 def mean_performance(array_length, search_type): #Average
@@ -302,7 +373,7 @@ def mean_performance(array_length, search_type): #Average
         return -1
 
 
-# In[36]:
+# In[11]:
 
 
 def g_mean_performance(base, amount, g_length, search_type): #Average
@@ -335,4 +406,27 @@ def g_mean_performance(base, amount, g_length, search_type): #Average
     
     plt.savefig((title), format='png')
     #plt.show()
+
+
+# In[22]:
+
+
+g_BS_performance(10, 1, 1, True)
+g_BS_performance(20, 1, 1, True)
+g_BS_performance(10, 10, 5, True)
+g_BS_performance(10, 10, 5, False)
+
+g_LS_performance(10, 1, 1, True)
+g_LS_performance(20, 1, 1, True)
+g_LS_performance(10, 10, 5, True)
+g_LS_performance(10, 10, 5, False)
+
+performance_comparison([40,40,20,20,10,10], ['BS','LS','BS','LS','BS','LS'], True)
+performance_comparison([40,40,20,20,10,10], ['BS','LS','BS','LS','BS','LS'], False)
+
+g_sum_performance(10, 10, 50,'BS')
+g_sum_performance(10, 10, 50,'LS')
+
+g_mean_performance(10, 10, 100,'BS')
+g_mean_performance(10, 10, 100,'LS')
 
