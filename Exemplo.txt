@@ -1,3 +1,5 @@
+#Gera os graficos dos Exemplos
+
 g_BS_performance(10, 1, 1, True)
 g_BS_performance(20, 1, 1, True)
 g_BS_performance(10, 10, 5, True)
@@ -8,8 +10,8 @@ g_LS_performance(20, 1, 1, True)
 g_LS_performance(10, 10, 5, True)
 g_LS_performance(10, 10, 5, False)
 
-performance_comparison([40,40,20,20,10,10], ['BS','LS','BS','LS','BS','LS'], True)
-performance_comparison([40,40,20,20,10,10], ['BS','LS','BS','LS','BS','LS'], False)
+performance_comparison([30],  True)
+performance_comparison([40,20,10], False)
 
 g_sum_performance(10, 10, 50,'BS')
 g_sum_performance(10, 10, 50,'LS')
